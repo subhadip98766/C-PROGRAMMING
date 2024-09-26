@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+
+void displayList(const vector<string>& shoppingList) {
+    if (shoppingList.empty()) {
+        cout << "Your shopping list is empty!" << endl;
+    } else {
+        cout << "Shopping List:" << endl;
+        for (int i = 0; i < shoppingList.size(); i++) {
+            cout << i + 1 << ". " << shoppingList[i] << endl;
+        }
+    }
+}
+
+int main() {
+    vector<string> shoppingList;  
+    int choice;
+    string item;
+
+    do {
+       
+        cout << "\nShopping List Menu:" << endl;
+        cout << "1. Add item" << endl;
+        cout << "2. Display list" << endl;
+        cout << "3. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+       
+        switch (choice) {
+            case 1:
+                
+                cout << "Enter the item to add: ";
+                cin.ignore();  
+                getline(cin, item);
+                shoppingList.push_back(item);
+                cout << "\"" << item << "\" has been added to your shopping list." << endl;
+                break;
+
+            case 2:
+               
+                displayList(shoppingList);
+                break;
+
+            case 3:
+                cout << "Exiting the program..." << endl;
+                break;
+
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+                break;
+        }
+    } while (choice != 3);
+
+    return 0;
+}
+
