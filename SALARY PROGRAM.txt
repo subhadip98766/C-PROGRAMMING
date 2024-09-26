@@ -1,0 +1,37 @@
+#include<iostream>
+using namespace std;
+class Employee {
+string name;
+int id;
+float salary;
+
+static int employeeCount;
+public:Employee(string empName, int empId, float empSalary) {
+name = empName;
+id = empId;
+salary = empSalary;
+employeeCount++;
+}
+void displayDetails() {
+cout << "Employee ID: " << id << ", Name: " << name << ",Salary: " << salary << endl;
+}
+static int getEmployeeCount() {
+return employeeCount;
+}
+};
+
+int Employee::employeeCount = 0;
+int main() {
+
+Employee emp1("Alice", 101, 50000);
+Employee emp2("Bob", 102, 55000);
+Employee emp3("Charlie", 103, 60000);
+
+cout << "Employee Details:\n";
+emp1.displayDetails();
+emp2.displayDetails();
+emp3.displayDetails();
+cout << "\nTotal Number of Employees: " <<
+Employee::getEmployeeCount() << endl;
+return 0;
+}
