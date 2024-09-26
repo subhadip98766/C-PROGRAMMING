@@ -1,0 +1,141 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+
+struct Transaction {
+    string type;      
+    double amount;    
+    string date;      
+};
+
+class ATM {
+private:
+    string accountHolderName;
+    int accountNumber;
+    double balance;
+    int pin;
+    vector<Transaction> miniStatement;  
+
+public:
+
+    ATM(string name, int accNum, double initialBalance, int cardPin) {
+        accountHolderName = name;
+        accountNumber = accNum;
+        balance = initialBalance;
+        pin = cardPin;
+    }
+
+    
+    int getPIN() {
+        return pin;
+    }
+
+    
+    double checkBalance() const {
+        return balance;
+    }
+
+    void withdraw(double amount, string date) {
+        if (amount > balance) {
+            cout << "Insufficient balance! Transaction failed." << endl;
+        } else {
+            balance -= amount;
+            cout << "Withdrawal of $" << amount << " successful." << endl;
+            addTransaction("Withdrawal", amount, date);
+        }
+    }
+
+    
+    void transfer(double amount, string date, int targetAccNum) {
+        if (amount > balance) {
+            cout << "Insufficient balance! Transfer failed." << endl;
+        } else {
+            balance -= amount;
+            cout << "Transfer of $" << amount << " to Account " << targetAccNum << " successful." << endl;
+            addTransaction("Transfer", amount, date);
+        }
+    }
+
+    
+    void displayMiniStatement() const {
+        cout << "\nMini Statement (Last 5 transactions):" << endl;
+        if (miniStatement.empty()) {
+            cout << "No transactions available." << endl;
+        } else {
+            for (int i = miniStatement.size() - 1; i >= 0 && i >= miniStatement.size() - 5; --i) {
+                cout << miniStatement[i].date << " | " << miniStatement[i].type << " | $" << miniStatement[i].amount << endl;
+            }
+        }
+    }
+
+private:
+    
+    void addTransaction(string type, double amount, string date) {
+        Transaction newTransaction = {type, amount, date};
+        miniStatement.push_back(newTransaction);
+    }
+};
+
+int main() {
+   
+    ATM user1("John Doe", 12345678, 1000.00, 1234);
+
+    int enteredPin;
+    cout << "Enter your PIN: ";
+    cin >> enteredPin;
+
+    if (enteredPin != user1.getPIN()) {
+        cout << "Invalid PIN! Access denied." << endl;
+        return 1;
+    }
+
+    int choice;
+    double amount;
+    string date;
+    int targetAccount;
+
+    do {
+        cout << "\nATM Menu:\n1. Check Balance\n2. Withdraw Money\n3. Transfer Money\n4. Mini Statement\n5. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+              
+                cout << "Current balance: $" << user1.checkBalance() << endl;
+                break;
+            case 2:
+                
+                cout << "Enter amount to withdraw: $";
+                cin >> amount;
+                cout << "Enter date (dd/mm/yyyy): ";
+                cin >> date;
+                user1.withdraw(amount, date);
+                break;
+            case 3:
+                
+                cout << "Enter amount to transfer: $";
+                cin >> amount;
+                cout << "Enter target account number: ";
+                cin >> targetAccount;
+                cout << "Enter date (dd/mm/yyyy): ";
+                cin >> date;
+                user1.transfer(amount, date, targetAccount);
+                break;
+            case 4:
+                
+                user1.displayMiniStatement();
+                break;
+            case 5:
+                cout << "Thank you for using the ATM. Goodbye!" << endl;
+                break;
+            default:
+                cout << "Invalid choice! Please try again." << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+
